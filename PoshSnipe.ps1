@@ -127,6 +127,13 @@ function Start-Snipe {
     $mojangRequest = Invoke-WebRequest https://api.mojang.com/user/profile/agent/minecraft/name/$currentName
     $firstCut = 17 + $currentName.Length
     $uuid = ($mojangRequest.content).Substring($firstCut,32)
+    $TimeofAvailability = $TimeAvailabilityText.text
+    $splitTime = $TimeofAvailability.Split(":")
+        $splitSeconds = [int]$splitTime[2] - 1
+        if ($splitSeconds -lt 10) {
+            $splitTime[2] = "0"+$splitSeconds.ToString()
+        }
+        $TimeofAvailability = $splitTime[0] + ":" + $splitTime[1] + ":" + $splitTime[2]
 
     #Headers for POST request
     $headers = New-Object "System.Collections.Generic.Dictionary[[String],[String]]"
@@ -143,11 +150,11 @@ function Start-Snipe {
         Write-Host "Preparing for snipe..."
         $timeRequest = Invoke-WebRequest http://worldtimeapi.org/api/ip
         $currentTime = ($timeRequest.Content).Substring(73,8)
-        Write-Host "Current time is:"$currentTime
-    } until($currentTime -eq $TimeAvailabilityText.text)
+        Write-Host "Current time is:" $currentTime
+    } until($currentTime -eq $TimeofAvailability)
     
     for ($i = 0; $i -lt 20; $i++) {
         Invoke-RestMethod -Uri https://api.mojang.com/user/profile/$uuid/name -Headers $headers -Method Post -Body $json -ContentType 'application/json'
-    }    
+    }  
 }
 [void]$Form.ShowDialog()
