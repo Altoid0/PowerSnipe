@@ -148,7 +148,6 @@ function Start-Snipe {
     
     for ($i = 0; $i -lt 20; $i++) {
         Invoke-RestMethod -Uri https://api.mojang.com/user/profile/$uuid/name -Headers $headers -Method Post -Body $json -ContentType 'application/json'
-        # Invoke-RestMethod -Uri https://api.mojang.com/user/profile/$uuid/name -Method 'POST' -Body $json -Headers $headers
     }    
 }
 [void]$Form.ShowDialog()
