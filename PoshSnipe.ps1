@@ -1,6 +1,6 @@
 <#
 .NAME
-    PoshSnipe
+    PowerSnipe
 #>
 
 #Import GUI
@@ -129,11 +129,14 @@ function Start-Snipe {
     $uuid = ($mojangRequest.content).Substring($firstCut,32)
     $TimeofAvailability = $TimeAvailabilityText.text
     $splitTime = $TimeofAvailability.Split(":")
-        $splitSeconds = [int]$splitTime[2] - 1
-        if ($splitSeconds -lt 10) {
-            $splitTime[2] = "0"+$splitSeconds.ToString()
-        }
-        $TimeofAvailability = $splitTime[0] + ":" + $splitTime[1] + ":" + $splitTime[2]
+    $splitSeconds = [int]$splitTime[2] - 1
+    if ($splitSeconds -lt 10) {
+        $splitTime[2] = "0"+$splitSeconds.ToString()
+    }
+    else {
+        $splitTime[2] = $splitSeconds.ToString()
+    }
+    $TimeofAvailability = $splitTime[0] + ":" + $splitTime[1] + ":" + $splitTime[2]
 
     #Headers for POST request
     $headers = New-Object "System.Collections.Generic.Dictionary[[String],[String]]"
