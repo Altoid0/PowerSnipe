@@ -118,24 +118,36 @@ $Form.controls.AddRange(@($title,$by,$CNameText,$CNameLabel,$TNameLabel,$TNameTe
 
 $SnipeButton.Add_Click({ Start-Snipe })
 
+function Get-CurrentTime {
+    $timeRequest = Invoke-WebRequest http://worldtimeapi.org/api/ip
+    $currentTime = ($timeRequest.Content).Substring(73,8)
+    return $currentTime
+}
 function Start-Snipe {
+    #Coversion of GUI variables to simpler variables for function
     $bearer = ("Bearer " + $BearerText.text).ToString()
     $userAgent = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/79.0.3945.130 Safari/537.36'
     $currentName = ($CNameText.text).ToString()
+    $TimeofAvailability = $TimeAvailabilityText.text
 
-    #Get UUID
+    #Get UUID from Mojang API
     $mojangRequest = Invoke-WebRequest https://api.mojang.com/user/profile/agent/minecraft/name/$currentName
+
+    #Parsing response from Mojang API
     $firstCut = 17 + $currentName.Length
     $uuid = ($mojangRequest.content).Substring($firstCut,32)
-    $TimeofAvailability = $TimeAvailabilityText.text
+
+    # Subtract 1 second from user provided drop time
     $splitTime = $TimeofAvailability.Split(":")
     $splitSeconds = [int]$splitTime[2] - 1
+    # Concatinate 0 infront if needed
     if ($splitSeconds -lt 10) {
         $splitTime[2] = "0"+$splitSeconds.ToString()
     }
     else {
         $splitTime[2] = $splitSeconds.ToString()
     }
+    # Combine String
     $TimeofAvailability = $splitTime[0] + ":" + $splitTime[1] + ":" + $splitTime[2]
 
     #Headers for POST request
@@ -150,14 +162,13 @@ function Start-Snipe {
     } | ConvertTo-Json
 
     Do{
-        Write-Host "Preparing for snipe..."
-        $timeRequest = Invoke-WebRequest http://worldtimeapi.org/api/ip
-        $currentTime = ($timeRequest.Content).Substring(73,8)
-        Write-Host "Current time is:" $currentTime
-    } until($currentTime -eq $TimeofAvailability)
-    
+        # Write-Host "Preparing for snipe..."
+        $compareTime = Get-CurrentTime
+    } until($compareTime -eq $TimeofAvailability)
+
+    # Spam POST requests 
     for ($i = 0; $i -lt 20; $i++) {
         Invoke-RestMethod -Uri https://api.mojang.com/user/profile/$uuid/name -Headers $headers -Method Post -Body $json -ContentType 'application/json'
-    }  
+    }
 }
 [void]$Form.ShowDialog()
