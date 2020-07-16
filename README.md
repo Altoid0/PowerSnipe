@@ -11,4 +11,4 @@ To do so run the following command in a PowerShell console:
 
 All the inputs should be self explanatory except for the Bearer Token. You can obtain the Bearer Token by logging in to minecraft.net with your account and and using [EditThisCookie](http://www.editthiscookie.com) to display the token.
 
-# Happy Sniping!
+## Happy Sniping!
