@@ -106,7 +106,7 @@ $BearerText.location             = New-Object System.Drawing.Point(27,280)
 $BearerText.Font                 = New-Object System.Drawing.Font('Microsoft Sans Serif',8)
 
 $SnipeButton                     = New-Object system.Windows.Forms.Button
-$SnipeButton.text                = "Prepare Snipe"
+$SnipeButton.text                = "Load Sniper"
 $SnipeButton.width               = 123
 $SnipeButton.height              = 40
 $SnipeButton.location            = New-Object System.Drawing.Point(309,315)
