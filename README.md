@@ -3,7 +3,7 @@
 PowerSniper is a name sniper created using native Windows Powershell Version 5.1, no fancy imports or dependencies needed!
 
 ## Usage
-To run PowerSniper simply download the most recent [build](https://github.com/Altoid0/PowerSnipe/releases).
+To use PowerSniper simply download the most recent [build](https://github.com/Altoid0/PowerSnipe/releases).
 However, if running random builds off the internet doesn't float your boat you can always just run PoshSnipe.ps1 in a normal PowerShell window.
 
 To do so run the following command in a PowerShell console:
