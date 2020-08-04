@@ -2,6 +2,8 @@
 .NAME
     PowerSnipe
 #>
+#Error handling
+$ErrorActionPreference = "SilentlyContinue"
 
 #Import GUI
 Add-Type -AssemblyName System.Windows.Forms
