@@ -172,5 +172,14 @@ function Start-Snipe {
     for ($i = 0; $i -lt 20; $i++) {
         Invoke-RestMethod -Uri https://api.mojang.com/user/profile/$uuid/name -Headers $headers -Method Post -Body $json -ContentType 'application/json'
     }
+    $nameHistory = Invoke-WebRequest https://api.mojang.com/user/profiles/$uuid/names
+    $nameHistory = $nameHistory.Content.ToString()
+    if ($nameHistory -match $TNameText.Text) {
+        Write-Host 'Name has been sniped'
+    }
+
+    else {
+        Write-Host "Name has not been sniped or Mojang's API is delayed"
+    }
 }
 [void]$Form.ShowDialog()
