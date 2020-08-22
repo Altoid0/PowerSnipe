@@ -5,6 +5,10 @@
 #Error handling
 $ErrorActionPreference = "SilentlyContinue"
 
+# Get current public IP and declare the first substring cut location in the world time API's index
+$ip = (Invoke-RestMethod http://ipinfo.io/json).ip
+$timeSubstringFirstCut = 60 + $ip.Length
+
 #Import GUI
 Add-Type -AssemblyName System.Windows.Forms
 [System.Windows.Forms.Application]::EnableVisualStyles()
@@ -121,8 +125,7 @@ $Form.controls.AddRange(@($title,$by,$CNameText,$CNameLabel,$TNameLabel,$TNameTe
 $SnipeButton.Add_Click({ Start-Snipe })
 
 function Get-CurrentTime {
-    $timeRequest = Invoke-WebRequest http://worldtimeapi.org/api/ip
-    $currentTime = ($timeRequest.Content).Substring(73,8)
+    $currentTime = (Invoke-WebRequest http://worldtimeapi.org/api/ip).Content.Substring($timeSubstringFirstCut,8)
     return $currentTime
 }
 function Start-Snipe {
@@ -183,3 +186,5 @@ function Start-Snipe {
     }
 }
 [void]$Form.ShowDialog()
+
+# (Invoke-RestMethod http://ipinfo.io/json).ip
