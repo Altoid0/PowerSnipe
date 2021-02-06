@@ -143,6 +143,7 @@ function Start-Snipe {
     $uuid = ($mojangRequest.content).Substring($firstCut,32)
 
     # Subtract 1 second from user provided drop time
+    <#
     $splitTime = $TimeofAvailability.Split(":")
     $splitSeconds = [int]$splitTime[2] - 1
     # Concatinate 0 infront if needed
@@ -154,6 +155,7 @@ function Start-Snipe {
     }
     # Combine String
     $TimeofAvailability = $splitTime[0] + ":" + $splitTime[1] + ":" + $splitTime[2]
+    #>
 
     #Headers for POST request
     $headers = New-Object "System.Collections.Generic.Dictionary[[String],[String]]"
@@ -172,7 +174,7 @@ function Start-Snipe {
     } until($compareTime -eq $TimeofAvailability)
 
     # Spam POST requests 
-    for ($i = 0; $i -lt 20; $i++) {
+    for ($i = 0; $i -lt 3; $i++) {
         Invoke-RestMethod -Uri https://api.mojang.com/user/profile/$uuid/name -Headers $headers -Method Post -Body $json -ContentType 'application/json'
     }
     $nameHistory = Invoke-WebRequest https://api.mojang.com/user/profiles/$uuid/names
